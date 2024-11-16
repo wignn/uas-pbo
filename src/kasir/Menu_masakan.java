@@ -39,6 +39,8 @@ public class Menu_masakan extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TableMasakan = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
+        UpdateBtn = new javax.swing.JButton();
+        InputBtn2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
@@ -95,15 +97,41 @@ public class Menu_masakan extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(TableMasakan);
 
+        UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        UpdateBtn.setText("Update");
+        UpdateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateBtnActionPerformed(evt);
+            }
+        });
+
+        InputBtn2.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        InputBtn2.setText("Input");
+        InputBtn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InputBtn2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(InputBtn2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(UpdateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(UpdateBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(InputBtn2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -168,9 +196,9 @@ public class Menu_masakan extends javax.swing.JFrame {
                     .addComponent(StatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -187,6 +215,14 @@ public class Menu_masakan extends javax.swing.JFrame {
     private void HargaMasakanTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HargaMasakanTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HargaMasakanTFActionPerformed
+
+    private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UpdateBtnActionPerformed
+
+    private void InputBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtn2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InputBtn2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,9 +262,11 @@ public class Menu_masakan extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField HargaMasakanTF;
     private javax.swing.JTextField IdMasakanTF1;
+    private javax.swing.JButton InputBtn2;
     private javax.swing.JTextField NamaMasakanTF;
     private javax.swing.JComboBox<String> StatusComboBox;
     private javax.swing.JTable TableMasakan;
+    private javax.swing.JButton UpdateBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
