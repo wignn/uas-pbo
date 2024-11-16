@@ -1,4 +1,5 @@
 package com.mycompany.program.kasir;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -158,6 +159,11 @@ public class Menu_register extends javax.swing.JFrame {
 
         LogoutBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         LogoutBtn.setText("Logout");
+        LogoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutBtnActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 24)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -287,6 +293,12 @@ public class Menu_register extends javax.swing.JFrame {
     private void NamaUserRegTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamaUserRegTF1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NamaUserRegTF1ActionPerformed
+
+    private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
+        Login l = new Login();
+        l.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_LogoutBtnActionPerformed
 
     /**
      * @param args the command line arguments

@@ -10,6 +10,9 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import java.lang.Exception;
 import com.mycompany.program.kasir.Menu_register;
+import org.mindrot.jbcrypt.BCrypt;
+
+
 
 /**
  *
@@ -149,6 +152,8 @@ public class Login extends javax.swing.JFrame {
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
         try {
             user u = new user();
+
+//            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), bcryptHashString);
             this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "' AND password = '" + u.password + "';");
             this.rs = this.stat.executeQuery();
             while (rs.next()) {
