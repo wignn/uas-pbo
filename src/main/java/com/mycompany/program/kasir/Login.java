@@ -7,6 +7,9 @@ package com.mycompany.program.kasir;
 import com.mycompany.program.kasir.config.connect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.lang.Exception;
+import com.mycompany.program.kasir.Menu_register;
 
 /**
  *
@@ -23,11 +26,21 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        k.db();
     }
 
-    void user() {
+    class user {
+
         int id_user, id_level;
         String username, password, nama_user;
+
+        public user() {
+            this.id_user = 0;
+            this.username = usernameField.getText();
+            this.password = PasswordField.getText();
+            this.nama_user = "";
+            this.id_level = 0;
+        }
     }
 
     /**
@@ -134,7 +147,46 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_PasswordFieldActionPerformed
 
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            user u = new user();
+            this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "' AND password = '" + u.password + "';");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()) {
+                u.id_level = rs.getInt("id_level");
+            }
+
+            if (u.id_level == 0) {
+                JOptionPane.showConfirmDialog(null, "user not found");
+            } else {
+                switch (u.id_level) {
+                    case 1:
+                        Menu_register reg = new Menu_register();
+                        reg.setVisible(true);
+                        this.setVisible(false);
+                        break;
+                    case 2:
+                        Menu_transaksi tran = new Menu_transaksi();
+                        tran.setVisible(true);
+                        this.setVisible(false);
+                        break;
+                    case 3:
+                        Menu_transaksi tran2 = new Menu_transaksi();
+                        tran2.setVisible(true);
+                        this.setVisible(false);
+                        tran2.CetakLaporanBtn.setEnabled(true);
+                        break;
+                    case 4:
+                        Menu_masakan mas = new Menu_masakan();
+                        mas.setVisible(true);
+                        this.setVisible(false);
+                        mas.LogoutBtn.setEnabled(true);
+                        break;
+
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_signBtnActionPerformed
 
     /**

@@ -5,6 +5,7 @@ com\mycompany\program\kasir\Menu_register$7.class
 com\mycompany\program\kasir\Kasir.class
 com\mycompany\program\kasir\Menu_register$2.class
 com\mycompany\program\kasir\Menu_transaksi$3.class
+com\mycompany\program\kasir\Login$user.class
 com\mycompany\program\kasir\Menu_transaksi$6.class
 com\mycompany\program\kasir\Login.class
 com\mycompany\program\kasir\Menu_masakan$4.class
