@@ -36,7 +36,7 @@ public class Menu_masakan extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         StatusComboBox = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TableMasakan = new javax.swing.JTable();
+        Table_Masakan = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         UpdateBtn = new javax.swing.JButton();
         InputBtn = new javax.swing.JButton();
@@ -61,6 +61,7 @@ public class Menu_masakan extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel3.setText("Harga");
 
+        IdMasakanTF1.setEnabled(false);
         IdMasakanTF1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IdMasakanTF1ActionPerformed(evt);
@@ -82,7 +83,7 @@ public class Menu_masakan extends javax.swing.JFrame {
         StatusComboBox.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tersedia", "Habis" }));
 
-        TableMasakan.setModel(new javax.swing.table.DefaultTableModel(
+        Table_Masakan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -93,7 +94,7 @@ public class Menu_masakan extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(TableMasakan);
+        jScrollPane1.setViewportView(Table_Masakan);
 
         UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         UpdateBtn.setText("Update");
@@ -320,7 +321,7 @@ public class Menu_masakan extends javax.swing.JFrame {
     public javax.swing.JButton MenuTransaksiBtn;
     private javax.swing.JTextField NamaMasakanTF;
     private javax.swing.JComboBox<String> StatusComboBox;
-    private javax.swing.JTable TableMasakan;
+    private javax.swing.JTable Table_Masakan;
     private javax.swing.JButton UpdateBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

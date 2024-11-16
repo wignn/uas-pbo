@@ -36,7 +36,7 @@ public class Menu_register extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         IdLevelComboBox = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TableMasakan = new javax.swing.JTable();
+        Table_Registrasi = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         UpdateBtn = new javax.swing.JButton();
         InputBtn = new javax.swing.JButton();
@@ -62,6 +62,7 @@ public class Menu_register extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel3.setText("Nama User");
 
+        IdUserRegTF.setEnabled(false);
         IdUserRegTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IdUserRegTFActionPerformed(evt);
@@ -83,7 +84,7 @@ public class Menu_register extends javax.swing.JFrame {
         IdLevelComboBox.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         IdLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
 
-        TableMasakan.setModel(new javax.swing.table.DefaultTableModel(
+        Table_Registrasi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -94,7 +95,7 @@ public class Menu_register extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(TableMasakan);
+        jScrollPane1.setViewportView(Table_Registrasi);
 
         UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         UpdateBtn.setText("Update");
@@ -333,7 +334,7 @@ public class Menu_register extends javax.swing.JFrame {
     public javax.swing.JButton MenuRegisterBtn;
     private javax.swing.JTextField NamaUserRegTF1;
     private javax.swing.JTextField PasswordRegTF;
-    private javax.swing.JTable TableMasakan;
+    private javax.swing.JTable Table_Registrasi;
     private javax.swing.JButton UpdateBtn;
     private javax.swing.JTextField UsernameRegTF;
     private javax.swing.JLabel jLabel2;
