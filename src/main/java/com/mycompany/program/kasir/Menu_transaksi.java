@@ -4,7 +4,6 @@ package com.mycompany.program.kasir;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author tigfi
@@ -108,6 +107,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
         CetakLaporanBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         CetakLaporanBtn.setText("Menu Registrasi");
+        CetakLaporanBtn.setEnabled(false);
         CetakLaporanBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CetakLaporanBtnActionPerformed(evt);
@@ -152,6 +152,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
         LogoutBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         LogoutBtn.setText("Logout");
+        LogoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutBtnActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 24)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -292,6 +297,12 @@ public class Menu_transaksi extends javax.swing.JFrame {
     private void JumlahBeliTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JumlahBeliTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_JumlahBeliTFActionPerformed
+
+    private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
+        Login l = new Login();
+        l.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_LogoutBtnActionPerformed
 
     /**
      * @param args the command line arguments
