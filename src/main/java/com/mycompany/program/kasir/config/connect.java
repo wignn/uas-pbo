@@ -16,7 +16,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import javax.swing.JOptionPane;
 
 public class connect {
-
     private static final Dotenv dotenv = Dotenv.load();
     private String Url = dotenv.get("DATABASE_URL");
     private Connection con;

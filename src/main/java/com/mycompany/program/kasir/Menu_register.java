@@ -46,7 +46,12 @@ public class Menu_register extends javax.swing.JFrame {
     }
 
     public void refreshTable() {
-        model = new DefaultTableModel();
+        model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         model.addColumn("Id User");
         model.addColumn("Username");
         model.addColumn("nama User");
@@ -392,7 +397,7 @@ public class Menu_register extends javax.swing.JFrame {
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         try {
-            int id_user = Integer.parseInt(IdUserRegTF.getText()); 
+            int id_user = Integer.parseInt(IdUserRegTF.getText());
             int confirm = JOptionPane.showConfirmDialog(
                     null,
                     "Apakah Anda yakin ingin menghapus data ini?",
@@ -403,7 +408,7 @@ public class Menu_register extends javax.swing.JFrame {
             if (confirm == JOptionPane.YES_OPTION) {
                 this.stat = k.getCon().prepareStatement("delete from user where id_user=?");
                 stat.setInt(1, id_user);
-                int rowsAffected = stat.executeUpdate(); 
+                int rowsAffected = stat.executeUpdate();
 
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
