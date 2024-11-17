@@ -335,12 +335,37 @@ public class Menu_register extends javax.swing.JFrame {
     }//GEN-LAST:event_PasswordRegTFActionPerformed
 
     private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "UPDATE user SET username = ?, name_user = ?, password = ?, id_level = ? WHERE id_user = ?";
+            this.stat = k.getCon().prepareStatement(sql);
+
+            stat.setString(1, UsernameRegTF.getText());
+            stat.setString(2, NamaUserRegTF1.getText());
+            stat.setString(3, BCrypt.hashpw(PasswordRegTF.getText(), BCrypt.gensalt(10)));
+            stat.setInt(4, Integer.parseInt(IdLevelComboBox.getSelectedItem().toString()));
+            stat.setInt(5, Integer.parseInt(IdUserRegTF.getText()));
+
+            int rowsUpdated = stat.executeUpdate();
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
+                refreshTable();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
         try {
             user u = new user();
+            if (u.username == null || u.username.isEmpty()
+                    || u.password == null || u.password.isEmpty()
+                    || u.nama_user == null || u.nama_user.isEmpty()
+                    || u.id_level == 0) {
+                JOptionPane.showMessageDialog(null, "Semua field harus diisi!");
+                return;
+            }
             this.stat = k.getCon().prepareStatement("insert into user values(?,?,?,?,?)");
             stat.setInt(1, 0);
             stat.setString(2, u.username);
@@ -355,11 +380,41 @@ public class Menu_register extends javax.swing.JFrame {
     }//GEN-LAST:event_InputBtnActionPerformed
 
     private void MenuRegisterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRegisterBtnActionPerformed
-        // TODO add your handling code here:
+        Menu_masakan m = new Menu_masakan();
+        m.setVisible(true);
+        this.setVisible(false);
+        m.InputBtn.setEnabled(true);
+        m.DeleteBtn.setEnabled(true);
+        m.MenuRegisterBtn.setEnabled(true);
+        m.MenuTransaksiBtn.setEnabled(true);
+        m.UpdateBtn.setEnabled(true);
     }//GEN-LAST:event_MenuRegisterBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            int id_user = Integer.parseInt(IdUserRegTF.getText()); // Ambil ID dari TextField
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Apakah Anda yakin ingin menghapus data ini?",
+                    "Konfirmasi Hapus",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.stat = k.getCon().prepareStatement("delete from user where id_user=?");
+                stat.setInt(1, id_user);
+                int rowsAffected = stat.executeUpdate(); // Jalankan query
+
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data tidak ditemukan!");
+                }
+            }
+            refreshTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void NamaUserRegTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamaUserRegTF1ActionPerformed

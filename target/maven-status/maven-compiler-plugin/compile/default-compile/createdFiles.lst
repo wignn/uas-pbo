@@ -2,6 +2,7 @@ com\mycompany\program\kasir\Menu_masakan$7.class
 com\mycompany\program\kasir\Menu_transaksi$8.class
 com\mycompany\program\kasir\Menu_masakan$2.class
 com\mycompany\program\kasir\Menu_register$7.class
+com\mycompany\program\kasir\session.class
 com\mycompany\program\kasir\Kasir.class
 com\mycompany\program\kasir\Menu_register$2.class
 com\mycompany\program\kasir\Menu_transaksi$3.class
@@ -11,7 +12,6 @@ com\mycompany\program\kasir\Login.class
 com\mycompany\program\kasir\Menu_masakan$4.class
 com\mycompany\program\kasir\Menu_register.class
 com\mycompany\program\kasir\Menu_register$9.class
-com\mycompany\program\kasir\config\NewClass.class
 com\mycompany\program\kasir\Menu_masakan$9.class
 com\mycompany\program\kasir\Login$2.class
 com\mycompany\program\kasir\Menu_register$4.class
