@@ -1,5 +1,11 @@
 package com.mycompany.program.kasir;
 
+import com.mycompany.program.kasir.config.connect;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -10,11 +16,72 @@ package com.mycompany.program.kasir;
  */
 public class Menu_masakan extends javax.swing.JFrame {
 
+    private DefaultTableModel model = null;
+    private PreparedStatement stat;
+    private ResultSet rs;
+    connect k = new connect();
+
     /**
      * Creates new form Menu_masakan
      */
     public Menu_masakan() {
+        k.db();
         initComponents();
+        refreshTable();
+    }
+
+    class masakan extends Menu_masakan {
+
+        int id_masakan, harga;
+        String nama_masakan, status;
+
+        public masakan() {
+            String idMasakanText = IdMasakanTF1.getText().trim();
+            if (!idMasakanText.isEmpty()) {
+                id_masakan = Integer.parseInt(idMasakanText);
+            } else {
+                id_masakan = 0;
+            }
+            nama_masakan = NamaMasakanTF.getText().trim();
+            this.harga = Integer.parseInt(HargaMasakanTF.getText().trim());
+            this.status = StatusComboBox.getSelectedItem().toString();
+        }
+
+    }
+
+
+    public void refreshTable() {
+        model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;  
+            }
+        };
+        model.addColumn("Id Masakan");
+        model.addColumn("Nama Masakan");
+        model.addColumn("Harga");
+        model.addColumn("Status Masakan");
+        Table_Masakan.setModel(model);
+        try {
+            this.stat = k.getCon().prepareStatement("select * from masakan");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()) {
+                Object[] data = {
+                    rs.getInt("id_masakan"),
+                    rs.getString("nama_masakan"),
+                    rs.getInt("harga"),
+                    rs.getString("status"),};
+                model.addRow(data);
+            }
+        } catch (Exception e) {
+            System.out.print(e);
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        NamaMasakanTF.setText("");
+        HargaMasakanTF.setText("");
+        IdMasakanTF1.setText("");
+
     }
 
     /**
@@ -93,6 +160,11 @@ public class Menu_masakan extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Table_Masakan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Table_MasakanMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Table_Masakan);
 
         UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -171,6 +243,11 @@ public class Menu_masakan extends javax.swing.JFrame {
         MenuTransaksiBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         MenuTransaksiBtn.setText("Menu Transaksi");
         MenuTransaksiBtn.setEnabled(false);
+        MenuTransaksiBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuTransaksiBtnActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 24)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -265,26 +342,99 @@ public class Menu_masakan extends javax.swing.JFrame {
     }//GEN-LAST:event_HargaMasakanTFActionPerformed
 
     private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            masakan m = new masakan();
+            System.out.print(m.harga + m.id_masakan + m.nama_masakan + m.status);
+            String sql = "UPDATE masakan SET nama_masakan = ?, harga = ?, status = ? WHERE id_masakan = ?";
+            this.stat = k.getCon().prepareStatement(sql);
+            stat.setString(1, m.nama_masakan);
+            stat.setInt(2, m.harga);
+            stat.setString(3, m.status);
+            stat.setInt(4, m.id_masakan);
+            int rowsUpdated = stat.executeUpdate();
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
+                refreshTable();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            masakan m = new masakan();
+            if (m.nama_masakan == null || m.status == null || m.harga == 0) {
+                JOptionPane.showMessageDialog(null, "Semua field harus diisi!");
+                return;
+            }
+            this.stat = k.getCon().prepareStatement("insert into masakan values(?,?,?,?)");
+            stat.setInt(1, m.id_masakan);
+            stat.setString(2, m.nama_masakan);
+            stat.setInt(3, m.harga);
+            stat.setString(4, m.status);
+            stat.executeUpdate();
+            System.out.print(stat);
+            refreshTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
     }//GEN-LAST:event_InputBtnActionPerformed
 
     private void MenuRegisterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRegisterBtnActionPerformed
-        // TODO add your handling code here:
+        Menu_register r = new Menu_register();
+        r.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_MenuRegisterBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            masakan m = new masakan();
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Apakah Anda yakin ingin menghapus data ini?",
+                    "Konfirmasi Hapus",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.stat = k.getCon().prepareStatement("delete from masakan where id_masakan=?");
+                stat.setInt(1, m.id_masakan);
+                int rowsAffected = stat.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data tidak ditemukan!");
+                }
+            }
+            refreshTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+
+        }
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
         Login l = new Login();
         l.setVisible(true);
-        this.setVisible(false);// TODO add your handling code here:
+        this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
+
+    private void Table_MasakanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_MasakanMouseClicked
+        int selectedRow = Table_Masakan.getSelectedRow();
+        IdMasakanTF1.setText(model.getValueAt(selectedRow, 0).toString());
+        NamaMasakanTF.setText(model.getValueAt(selectedRow, 1).toString());
+        HargaMasakanTF.setText(model.getValueAt(selectedRow, 2).toString());
+        StatusComboBox.setSelectedItem(model.getValueAt(selectedRow, 3));
+    }//GEN-LAST:event_Table_MasakanMouseClicked
+
+    private void MenuTransaksiBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuTransaksiBtnActionPerformed
+        Menu_transaksi t = new Menu_transaksi();
+        t.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_MenuTransaksiBtnActionPerformed
 
     /**
      * @param args the command line arguments
