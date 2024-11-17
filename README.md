@@ -1,4 +1,4 @@
-## Run
+## SETUP
 ```cmd
 mvn install
 ```
