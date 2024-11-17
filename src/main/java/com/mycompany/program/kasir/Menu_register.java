@@ -174,7 +174,7 @@ public class Menu_register extends javax.swing.JFrame {
         });
 
         MenuRegisterBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        MenuRegisterBtn.setText("Menu Registrasi");
+        MenuRegisterBtn.setText("Menu Masakan");
         MenuRegisterBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MenuRegisterBtnActionPerformed(evt);

@@ -49,8 +49,14 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     }
 
+
     public void refreshTable() {
-        model = new DefaultTableModel();
+        model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;  
+            }
+        };
         model.addColumn("Id Masakan");
         model.addColumn("Nama Masakan");
         model.addColumn("Harga");
@@ -71,6 +77,7 @@ public class Menu_masakan extends javax.swing.JFrame {
             System.out.print(e);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
         NamaMasakanTF.setText("");
         HargaMasakanTF.setText("");
         IdMasakanTF1.setText("");
@@ -236,6 +243,11 @@ public class Menu_masakan extends javax.swing.JFrame {
         MenuTransaksiBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         MenuTransaksiBtn.setText("Menu Transaksi");
         MenuTransaksiBtn.setEnabled(false);
+        MenuTransaksiBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuTransaksiBtnActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 24)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -372,7 +384,9 @@ public class Menu_masakan extends javax.swing.JFrame {
     }//GEN-LAST:event_InputBtnActionPerformed
 
     private void MenuRegisterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRegisterBtnActionPerformed
-        // TODO add your handling code here:
+        Menu_register r = new Menu_register();
+        r.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_MenuRegisterBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
@@ -388,7 +402,7 @@ public class Menu_masakan extends javax.swing.JFrame {
             if (confirm == JOptionPane.YES_OPTION) {
                 this.stat = k.getCon().prepareStatement("delete from masakan where id_masakan=?");
                 stat.setInt(1, m.id_masakan);
-                int rowsAffected = stat.executeUpdate(); 
+                int rowsAffected = stat.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
                 } else {
@@ -405,7 +419,7 @@ public class Menu_masakan extends javax.swing.JFrame {
     private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
         Login l = new Login();
         l.setVisible(true);
-        this.setVisible(false);// TODO add your handling code here:
+        this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
 
     private void Table_MasakanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_MasakanMouseClicked
@@ -415,6 +429,12 @@ public class Menu_masakan extends javax.swing.JFrame {
         HargaMasakanTF.setText(model.getValueAt(selectedRow, 2).toString());
         StatusComboBox.setSelectedItem(model.getValueAt(selectedRow, 3));
     }//GEN-LAST:event_Table_MasakanMouseClicked
+
+    private void MenuTransaksiBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuTransaksiBtnActionPerformed
+        Menu_transaksi t = new Menu_transaksi();
+        t.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_MenuTransaksiBtnActionPerformed
 
     /**
      * @param args the command line arguments
