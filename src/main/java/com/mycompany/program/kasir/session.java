@@ -23,7 +23,6 @@ public class session {
         return "ID User: " + id_user + ", Username: " + username + ", ID Level: " + id_level;
     }
 
-    // Getter untuk setiap atribut
     public int getIdUser() {
         return id_user;
     }
