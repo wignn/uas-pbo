@@ -332,7 +332,7 @@ public class Menu_masakan extends javax.swing.JFrame {
     private javax.swing.JTextField NamaMasakanTF;
     private javax.swing.JComboBox<String> StatusComboBox;
     private javax.swing.JTable Table_Masakan;
-    private javax.swing.JButton UpdateBtn;
+    public javax.swing.JButton UpdateBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

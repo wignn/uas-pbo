@@ -160,6 +160,8 @@ public class Login extends javax.swing.JFrame {
                 int userLevel = rs.getInt("id_level");
                 if (BCrypt.checkpw(u.password, hashedPassword)) {
                     u.id_level = userLevel;
+                    session s = new session();
+                    s.setSession(u.id_user, u.username, u.id_level);
                     switch (userLevel) {
                         case 1:
                             Menu_register reg = new Menu_register();
