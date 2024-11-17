@@ -1,21 +1,76 @@
 package com.mycompany.program.kasir;
 
+import com.mycompany.program.kasir.config.connect;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import org.mindrot.jbcrypt.BCrypt;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author tigfi
  */
 public class Menu_register extends javax.swing.JFrame {
 
+    private DefaultTableModel model = null;
+    private PreparedStatement stat;
+    private ResultSet rs;
+    connect k = new connect();
+
     /**
      * Creates new form Menu_masakan
      */
     public Menu_register() {
+        k.db();
         initComponents();
+        refreshTable();
+    }
+
+    class user extends Menu_register {
+
+        int id_user, id_level;
+        String username, password, nama_user;
+
+        public user() {
+            username = UsernameRegTF.getText();
+            password = BCrypt.hashpw(PasswordRegTF.getText(), BCrypt.gensalt(10));
+            nama_user = NamaUserRegTF1.getText();
+            id_level = Integer.parseInt(IdLevelComboBox.getSelectedItem().toString());
+        }
+
+    }
+
+    public void refreshTable() {
+        model = new DefaultTableModel();
+        model.addColumn("Id User");
+        model.addColumn("Username");
+        model.addColumn("nama User");
+        model.addColumn("Id_level");
+        Table_Registrasi.setModel(model);
+        try {
+            this.stat = k.getCon().prepareStatement("select * from user");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()) {
+                Object[] data = {
+                    rs.getString("id_user"),
+                    rs.getString("username"),
+                    rs.getString("name_user"),
+                    rs.getString("id_level"),};
+                model.addRow(data);
+            };
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        IdUserRegTF.setText("");
+        NamaUserRegTF1.setText("");
+        PasswordRegTF.setText("");
+        UsernameRegTF.setText("");
     }
 
     /**
@@ -95,6 +150,11 @@ public class Menu_register extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Table_Registrasi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Table_RegistrasiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Table_Registrasi);
 
         UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -279,7 +339,19 @@ public class Menu_register extends javax.swing.JFrame {
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            user u = new user();
+            this.stat = k.getCon().prepareStatement("insert into user values(?,?,?,?,?)");
+            stat.setInt(1, 0);
+            stat.setString(2, u.username);
+            stat.setString(3, u.password);
+            stat.setString(4, u.nama_user);
+            stat.setInt(5, u.id_level);
+            stat.executeUpdate();
+            refreshTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_InputBtnActionPerformed
 
     private void MenuRegisterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRegisterBtnActionPerformed
@@ -299,6 +371,13 @@ public class Menu_register extends javax.swing.JFrame {
         l.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
+
+    private void Table_RegistrasiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_RegistrasiMouseClicked
+        IdUserRegTF.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 0).toString());
+        UsernameRegTF.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 1).toString());
+        NamaUserRegTF1.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 2).toString());
+
+    }//GEN-LAST:event_Table_RegistrasiMouseClicked
 
     /**
      * @param args the command line arguments
