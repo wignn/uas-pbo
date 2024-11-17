@@ -8,13 +8,136 @@ package com.mycompany.program.kasir;
  *
  * @author tigfi
  */
+import com.mycompany.program.kasir.config.connect;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+
 public class Menu_transaksi extends javax.swing.JFrame {
+
+    private DefaultTableModel model = null;
+    private PreparedStatement stat;
+    private ResultSet rs;
+    connect k = new connect();
 
     /**
      * Creates new form Menu_masakan
      */
     public Menu_transaksi() {
+        k.db();
         initComponents();
+        refreshCombo();
+        refreshTable();
+
+    }
+
+    public class transaksi extends Menu_transaksi {
+
+        int id_transaksi, id_masakan, jumlah_beli, harga, total_bayar;
+        String nama_pelanggan, nama_masakan, tanggal;
+
+        public transaksi() {
+            this.nama_pelanggan = NamaPelangganTF.getText();
+            String combo = IdMasakanComboBox.getSelectedItem().toString();
+            String[] arr = combo.split(":");
+            System.out.println(arr); // Print the array for debugging
+
+            this.id_masakan = Integer.parseInt(arr[0].trim()); // Ensure no leading/trailing spaces
+            this.nama_masakan = arr[1];
+
+            try {
+                String hargaStr = arr[2].trim();
+                Date date = DateTF.getDate();
+                DateFormat df = new SimpleDateFormat("YYYY-MM-dd");
+                this.tanggal = df.format(date);
+                if (isNumeric(hargaStr)) {
+                    this.harga = Integer.parseInt(hargaStr);
+                } else {
+                    throw new NumberFormatException("Harga is not a valid number.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            this.jumlah_beli = Integer.parseInt(JumlahBeliTF.getText());
+            this.total_bayar = this.harga * this.jumlah_beli;
+        }
+
+        // Utility method to check if a string is numeric
+        private boolean isNumeric(String str) {
+            try {
+                Integer.parseInt(str);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+    }
+
+    public void refreshTable() {
+        model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        model.addColumn("Id Transaksi");
+        model.addColumn("Nama Pelanggan");
+        model.addColumn("Id Masakan");
+        model.addColumn("Tanggal");
+        model.addColumn("Nama Masakan");
+        model.addColumn("Harga");
+        model.addColumn("Jumlah Beli");
+        model.addColumn("Total Beli");
+        TableTransaksi.setModel(model);
+        try {
+            this.stat = k.getCon().prepareStatement("select * from transaksi");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()) {
+                Object[] data = {
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getString(5),
+                    rs.getString(6),
+                    rs.getString(7),
+                    rs.getString(8),};
+                model.addRow(data);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+
+        IdTransaksiTF.setText("");
+        NamaPelangganTF.setText("");
+        JumlahBeliTF.setText("");
+        TotalBayarTF.setText("");
+    }
+
+    public void refreshCombo() {
+        try {
+            this.stat = k.getCon().prepareStatement("SELECT * FROM masakan WHERE status='Tersedia'");
+            this.rs = this.stat.executeQuery();
+            while (rs.next()) {
+                IdMasakanComboBox.addItem(
+                        rs.getInt("id_masakan") + ": "
+                        + rs.getString("nama_masakan") + ": "
+                        + rs.getString("harga") + ": "
+                        + rs.getString("status")
+                );
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     /**
@@ -33,7 +156,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         IdMasakanComboBox = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Table_Registrasi = new javax.swing.JTable();
+        TableTransaksi = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         UpdateBtn = new javax.swing.JButton();
         InputBtn = new javax.swing.JButton();
@@ -44,9 +167,10 @@ public class Menu_transaksi extends javax.swing.JFrame {
         LihatMenuBtn = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        TotalBeliTF = new javax.swing.JTextField();
+        TotalBayarTF = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         JumlahBeliTF = new javax.swing.JTextField();
+        DateTF = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
@@ -75,8 +199,13 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
         IdMasakanComboBox.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         IdMasakanComboBox.setMinimumSize(new java.awt.Dimension(97, 22));
+        IdMasakanComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IdMasakanComboBoxActionPerformed(evt);
+            }
+        });
 
-        Table_Registrasi.setModel(new javax.swing.table.DefaultTableModel(
+        TableTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -87,7 +216,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(Table_Registrasi);
+        jScrollPane1.setViewportView(TableTransaksi);
 
         UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         UpdateBtn.setText("Update");
@@ -174,21 +303,23 @@ public class Menu_transaksi extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel8.setText("Jumlah Beli");
 
-        TotalBeliTF.setEnabled(false);
-        TotalBeliTF.addActionListener(new java.awt.event.ActionListener() {
+        TotalBayarTF.setEnabled(false);
+        TotalBayarTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TotalBeliTFActionPerformed(evt);
+                TotalBayarTFActionPerformed(evt);
             }
         });
 
         jLabel9.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jLabel9.setText("Id Masakan");
+        jLabel9.setText("Tanggal");
 
         JumlahBeliTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JumlahBeliTFActionPerformed(evt);
             }
         });
+
+        DateTF.setMinimumSize(new java.awt.Dimension(64, 22));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,14 +344,15 @@ public class Menu_transaksi extends javax.swing.JFrame {
                                 .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TotalBeliTF)
+                            .addComponent(TotalBayarTF)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(IdMasakanComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(LihatMenuBtn))
                             .addComponent(IdTransaksiTF)
                             .addComponent(NamaPelangganTF)
-                            .addComponent(JumlahBeliTF)))
+                            .addComponent(JumlahBeliTF)
+                            .addComponent(DateTF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jScrollPane1)))
@@ -247,15 +379,17 @@ public class Menu_transaksi extends javax.swing.JFrame {
                     .addComponent(IdMasakanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LihatMenuBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(DateTF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JumlahBeliTF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TotalBeliTF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TotalBayarTF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -279,7 +413,36 @@ public class Menu_transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            transaksi t = new transaksi();
+            String sql = "INSERT INTO transaksi (id_transaksi, nama_pelanggan, id_masakan, tanggal, nama_masakan, harga, jumlah_beli, total_bayar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            this.stat = k.getCon().prepareStatement(sql);
+            stat.setInt(1, 0); 
+            stat.setString(2, t.nama_pelanggan);
+            stat.setInt(3, t.id_masakan);
+            stat.setString(4, t.tanggal); 
+            stat.setString(5, t.nama_masakan);
+            stat.setInt(6, t.harga);
+            stat.setInt(7, t.jumlah_beli);
+            stat.setInt(8, t.total_bayar);
+            int p = JOptionPane.showConfirmDialog(null,
+                    "Tanggal: " + t.tanggal
+                    + "\nNama Pelanggan: " + t.nama_pelanggan
+                    + "\nData telah disimpan. Apakah Anda ingin melanjutkan?",
+                    "Konfirmasi", JOptionPane.YES_NO_OPTION);
+
+            if (p == JOptionPane.YES_OPTION) {
+                this.stat.executeUpdate();
+                System.out.println("Data berhasil disimpan!");
+                refreshTable();
+            } else {
+                System.out.println("Data tidak disimpan.");
+                refreshTable();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.out.print(e);
+        }
     }//GEN-LAST:event_InputBtnActionPerformed
 
     private void CetakLaporanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CetakLaporanBtnActionPerformed
@@ -290,9 +453,9 @@ public class Menu_transaksi extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
-    private void TotalBeliTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalBeliTFActionPerformed
+    private void TotalBayarTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalBayarTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TotalBeliTFActionPerformed
+    }//GEN-LAST:event_TotalBayarTFActionPerformed
 
     private void JumlahBeliTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JumlahBeliTFActionPerformed
         // TODO add your handling code here:
@@ -303,6 +466,10 @@ public class Menu_transaksi extends javax.swing.JFrame {
         l.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
+
+    private void IdMasakanComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdMasakanComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IdMasakanComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -344,6 +511,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton CetakLaporanBtn;
+    private com.toedter.calendar.JDateChooser DateTF;
     public javax.swing.JButton DeleteBtn;
     private javax.swing.JComboBox<String> IdMasakanComboBox;
     private javax.swing.JTextField IdTransaksiTF;
@@ -352,8 +520,8 @@ public class Menu_transaksi extends javax.swing.JFrame {
     private javax.swing.JButton LihatMenuBtn;
     public javax.swing.JButton LogoutBtn;
     private javax.swing.JTextField NamaPelangganTF;
-    private javax.swing.JTable Table_Registrasi;
-    private javax.swing.JTextField TotalBeliTF;
+    private javax.swing.JTable TableTransaksi;
+    private javax.swing.JTextField TotalBayarTF;
     private javax.swing.JButton UpdateBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
