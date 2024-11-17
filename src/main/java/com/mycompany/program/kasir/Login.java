@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import java.lang.Exception;
 import com.mycompany.program.kasir.Menu_register;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -25,8 +26,9 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
-        initComponents();
         k.db();
+        
+        initComponents();
     }
 
     class user {
@@ -149,40 +151,45 @@ public class Login extends javax.swing.JFrame {
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
         try {
             user u = new user();
-            this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "' AND password = '" + u.password + "';");
+            this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "';");
+
             this.rs = this.stat.executeQuery();
-            while (rs.next()) {
-                u.id_level = rs.getInt("id_level");
-            }
 
-            if (u.id_level == 0) {
-                JOptionPane.showConfirmDialog(null, "user not found");
-            } else {
-                switch (u.id_level) {
-                    case 1:
-                        Menu_register reg = new Menu_register();
-                        reg.setVisible(true);
-                        this.setVisible(false);
-                        break;
-                    case 2:
-                        Menu_transaksi tran = new Menu_transaksi();
-                        tran.setVisible(true);
-                        this.setVisible(false);
-                        break;
-                    case 3:
-                        Menu_transaksi tran2 = new Menu_transaksi();
-                        tran2.setVisible(true);
-                        this.setVisible(false);
-                        tran2.CetakLaporanBtn.setEnabled(true);
-                        break;
-                    case 4:
-                        Menu_masakan mas = new Menu_masakan();
-                        mas.setVisible(true);
-                        this.setVisible(false);
-                        mas.LogoutBtn.setEnabled(true);
-                        break;
-
+           if (rs.next()) {
+                String hashedPassword = rs.getString("password");
+                int userLevel = rs.getInt("id_level");
+                if (BCrypt.checkpw(u.password, hashedPassword)) {
+                    u.id_level = userLevel;
+                    switch (userLevel) {
+                        case 1:
+                            Menu_register reg = new Menu_register();
+                            reg.setVisible(true);
+                            break;
+                        case 2:
+                            Menu_transaksi tran = new Menu_transaksi();
+                            tran.setVisible(true);
+                            break;
+                        case 3:
+                            Menu_transaksi tran2 = new Menu_transaksi();
+                            tran2.setVisible(true);
+                            tran2.CetakLaporanBtn.setEnabled(true);
+                            break;
+                        case 4:
+                            Menu_masakan mas = new Menu_masakan();
+                            mas.setVisible(true);
+                            mas.LogoutBtn.setEnabled(true);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "User level tidak valid");
+                            break;
+                    }
+                } else {
+                    // Password salah
+                    JOptionPane.showMessageDialog(null, "Password salah");
                 }
+            } else {
+                // User tidak ditemukan
+                JOptionPane.showMessageDialog(null, "User tidak ditemukan");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

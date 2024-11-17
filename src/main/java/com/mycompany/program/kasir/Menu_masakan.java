@@ -4,7 +4,6 @@ package com.mycompany.program.kasir;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author tigfi
@@ -163,6 +162,11 @@ public class Menu_masakan extends javax.swing.JFrame {
         LogoutBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         LogoutBtn.setText("Logout");
         LogoutBtn.setEnabled(false);
+        LogoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutBtnActionPerformed(evt);
+            }
+        });
 
         MenuTransaksiBtn.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         MenuTransaksiBtn.setText("Menu Transaksi");
@@ -275,6 +279,12 @@ public class Menu_masakan extends javax.swing.JFrame {
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_DeleteBtnActionPerformed
+
+    private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
+        Login l = new Login();
+        l.setVisible(true);
+        this.setVisible(false);// TODO add your handling code here:
+    }//GEN-LAST:event_LogoutBtnActionPerformed
 
     /**
      * @param args the command line arguments
