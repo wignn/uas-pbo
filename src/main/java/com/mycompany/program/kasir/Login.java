@@ -166,19 +166,23 @@ public class Login extends javax.swing.JFrame {
                         case 1:
                             Menu_register reg = new Menu_register();
                             reg.setVisible(true);
+                            this.setVisible(false);
                             break;
                         case 2:
                             Menu_transaksi tran = new Menu_transaksi();
                             tran.setVisible(true);
+                            this.setVisible(false);
                             break;
                         case 3:
                             Menu_transaksi tran2 = new Menu_transaksi();
                             tran2.setVisible(true);
+                            this.setVisible(false);
                             tran2.CetakLaporanBtn.setEnabled(true);
                             break;
                         case 4:
                             Menu_masakan mas = new Menu_masakan();
                             mas.setVisible(true);
+                            this.setVisible(false);
                             mas.LogoutBtn.setEnabled(true);
                             break;
                         default:

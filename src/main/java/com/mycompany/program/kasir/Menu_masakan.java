@@ -16,6 +16,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Menu_masakan extends javax.swing.JFrame {
 
+    session session = new session();
+
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
@@ -28,6 +30,7 @@ public class Menu_masakan extends javax.swing.JFrame {
         k.db();
         initComponents();
         refreshTable();
+        validateUser();
     }
 
     class masakan extends Menu_masakan {
@@ -49,12 +52,24 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     }
 
+    public boolean validateUser() {
+        if (session.getIdLevel() < 4 & session.getIdLevel() > 0) {
+            InputBtn.setEnabled(true);
+            DeleteBtn.setEnabled(true);
+            MenuRegisterBtn.setEnabled(true);
+            MenuTransaksiBtn.setEnabled(true);
+            UpdateBtn.setEnabled(true);
+            return true;
+        }
+
+        return false;
+    }
 
     public void refreshTable() {
         model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;  
+                return false;
             }
         };
         model.addColumn("Id Masakan");
@@ -77,7 +92,7 @@ public class Menu_masakan extends javax.swing.JFrame {
             System.out.print(e);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-
+InputBtn.setEnabled(true);
         NamaMasakanTF.setText("");
         HargaMasakanTF.setText("");
         IdMasakanTF1.setText("");
@@ -148,6 +163,11 @@ public class Menu_masakan extends javax.swing.JFrame {
 
         StatusComboBox.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tersedia", "Habis" }));
+        StatusComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StatusComboBoxActionPerformed(evt);
+            }
+        });
 
         Table_Masakan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -343,6 +363,10 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
         try {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "Tidak punya hak akses");
+                return;
+            }
             masakan m = new masakan();
             System.out.print(m.harga + m.id_masakan + m.nama_masakan + m.status);
             String sql = "UPDATE masakan SET nama_masakan = ?, harga = ?, status = ? WHERE id_masakan = ?";
@@ -364,6 +388,10 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
         try {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "Tidak punya hak akses");
+                return;
+            }
             masakan m = new masakan();
             if (m.nama_masakan == null || m.status == null || m.harga == 0) {
                 JOptionPane.showMessageDialog(null, "Semua field harus diisi!");
@@ -391,6 +419,10 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         try {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "Tidak punya hak akses");
+                return;
+            }
             masakan m = new masakan();
             int confirm = JOptionPane.showConfirmDialog(
                     null,
@@ -412,7 +444,6 @@ public class Menu_masakan extends javax.swing.JFrame {
             refreshTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-
         }
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
@@ -423,6 +454,10 @@ public class Menu_masakan extends javax.swing.JFrame {
     }//GEN-LAST:event_LogoutBtnActionPerformed
 
     private void Table_MasakanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_MasakanMouseClicked
+        if (!validateUser()) {
+            return;
+        }
+        InputBtn.setEnabled(false);
         int selectedRow = Table_Masakan.getSelectedRow();
         IdMasakanTF1.setText(model.getValueAt(selectedRow, 0).toString());
         NamaMasakanTF.setText(model.getValueAt(selectedRow, 1).toString());
@@ -435,6 +470,10 @@ public class Menu_masakan extends javax.swing.JFrame {
         t.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_MenuTransaksiBtnActionPerformed
+
+    private void StatusComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StatusComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_StatusComboBoxActionPerformed
 
     /**
      * @param args the command line arguments

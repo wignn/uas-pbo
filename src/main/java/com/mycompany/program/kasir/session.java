@@ -10,13 +10,17 @@ package com.mycompany.program.kasir;
  */
 public class session {
 
-    public String username;
-    public int id_user, id_level;
+    public static String username;
+    public static int id_user, id_level;
 
     public void setSession(int id_user, String username, int id_level) {
         this.id_level = id_level;
         this.username = username;
         this.id_user = id_user;
+        System.out.println(this.id_level);
+        System.out.println(this.username);
+
+
     }
 
     public String getSession() {

@@ -27,6 +27,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
     private PreparedStatement stat;
     private ResultSet rs;
     connect k = new connect();
+    session session = new session();
 
     /**
      * Creates new form Menu_masakan
@@ -36,7 +37,14 @@ public class Menu_transaksi extends javax.swing.JFrame {
         initComponents();
         refreshCombo();
         refreshTable();
+    }
 
+    public boolean validateUser() {
+        if (session.getIdLevel() < 4 && session.getIdLevel() > 0) {
+
+            return true;
+        }
+        return false;
     }
 
     public class transaksi extends Menu_transaksi {
@@ -48,9 +56,8 @@ public class Menu_transaksi extends javax.swing.JFrame {
             this.nama_pelanggan = NamaPelangganTF.getText();
             String combo = IdMasakanComboBox.getSelectedItem().toString();
             String[] arr = combo.split(":");
-            System.out.println(arr); // Print the array for debugging
-
-            this.id_masakan = Integer.parseInt(arr[0].trim()); // Ensure no leading/trailing spaces
+            System.out.println(arr);
+            this.id_masakan = Integer.parseInt(arr[0].trim());
             this.nama_masakan = arr[1];
 
             try {
@@ -70,7 +77,6 @@ public class Menu_transaksi extends javax.swing.JFrame {
             this.total_bayar = this.harga * this.jumlah_beli;
         }
 
-        // Utility method to check if a string is numeric
         private boolean isNumeric(String str) {
             try {
                 Integer.parseInt(str);
@@ -120,6 +126,8 @@ public class Menu_transaksi extends javax.swing.JFrame {
         NamaPelangganTF.setText("");
         JumlahBeliTF.setText("");
         TotalBayarTF.setText("");
+        DateTF.setDate(null);
+        InputBtn.setEnabled(true);
     }
 
     public void refreshCombo() {
@@ -216,6 +224,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        TableTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableTransaksiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TableTransaksi);
 
         UpdateBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -296,6 +309,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
         LihatMenuBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         LihatMenuBtn.setText("Lihat Menu");
+        LihatMenuBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LihatMenuBtnActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel7.setText("Total Bayar");
@@ -409,18 +427,67 @@ public class Menu_transaksi extends javax.swing.JFrame {
     }//GEN-LAST:event_IdTransaksiTFActionPerformed
 
     private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "tidak punya hak akses");
+                return;
+            }
+            transaksi t = new transaksi();
+            t.id_transaksi = Integer.parseInt(IdTransaksiTF.getText());
+            t.nama_pelanggan = NamaPelangganTF.getText();
+
+            Date date = DateTF.getDate();
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            t.tanggal = df.format(date);
+
+            System.out.println("Debugging data transaksi sebelum query:");
+            System.out.println("ID Transaksi: " + t.id_transaksi);
+            System.out.println("Nama Pelanggan: " + t.nama_pelanggan);
+            System.out.println("Tanggal: " + t.tanggal);
+            System.out.println("Nama Masakan: " + t.nama_masakan);
+            System.out.println("Harga: " + t.harga);
+            System.out.println("Jumlah Beli: " + t.jumlah_beli);
+            System.out.println("Total Bayar: " + t.total_bayar);
+
+            String sql = "UPDATE transaksi SET nama_pelanggan = ?,id_masakan=?, tanggal = ?, nama_masakan = ?, harga = ?, jumlah_beli = ?, total_bayar = ? WHERE id_transaksi = ?";
+            this.stat = k.getCon().prepareStatement(sql);
+
+            this.stat.setString(1, t.nama_pelanggan);
+            this.stat.setInt(2, t.id_masakan);
+            this.stat.setString(3, t.tanggal);
+            this.stat.setString(4, t.nama_masakan);
+            this.stat.setInt(5, t.harga);
+            this.stat.setInt(6, t.jumlah_beli);
+            this.stat.setInt(7, t.total_bayar);
+            this.stat.setInt(8, t.id_transaksi);
+
+            int rowsUpdated = stat.executeUpdate();
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
+                refreshTable();
+
+            }
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
         try {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "tidak punya hak akses");
+                return;
+            }
             transaksi t = new transaksi();
             String sql = "INSERT INTO transaksi (id_transaksi, nama_pelanggan, id_masakan, tanggal, nama_masakan, harga, jumlah_beli, total_bayar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             this.stat = k.getCon().prepareStatement(sql);
-            stat.setInt(1, 0); 
+            stat.setInt(1, 0);
             stat.setString(2, t.nama_pelanggan);
             stat.setInt(3, t.id_masakan);
-            stat.setString(4, t.tanggal); 
+            stat.setString(4, t.tanggal);
             stat.setString(5, t.nama_masakan);
             stat.setInt(6, t.harga);
             stat.setInt(7, t.jumlah_beli);
@@ -445,12 +512,39 @@ public class Menu_transaksi extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_InputBtnActionPerformed
 
+
     private void CetakLaporanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CetakLaporanBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CetakLaporanBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "tidak punya hak akses");
+                return;
+            }
+            transaksi t = new transaksi();
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Apakah Anda yakin ingin menghapus data ini?",
+                    "Konfirmasi Hapus",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.stat = k.getCon().prepareStatement("delete from transaksi where id_transaksi=?");
+                stat.setInt(1, Integer.parseInt(IdTransaksiTF.getText()));
+                int rowsAffected = stat.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data tidak ditemukan!");
+                }
+            }
+            refreshTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void TotalBayarTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalBayarTFActionPerformed
@@ -470,6 +564,32 @@ public class Menu_transaksi extends javax.swing.JFrame {
     private void IdMasakanComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdMasakanComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_IdMasakanComboBoxActionPerformed
+
+    private void TableTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableTransaksiMouseClicked
+        try {
+            if (!validateUser()) {
+                return;
+            }
+            InputBtn.setEnabled(false);
+            String dateString = model.getValueAt(TableTransaksi.getSelectedRow(), 3).toString();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(dateString);
+            DateTF.setDate(date);
+            IdTransaksiTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 0).toString());
+            NamaPelangganTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 1).toString());
+            JumlahBeliTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 6).toString());
+            TotalBayarTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 7).toString());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_TableTransaksiMouseClicked
+
+    private void LihatMenuBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LihatMenuBtnActionPerformed
+        Menu_masakan m = new Menu_masakan();
+        m.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_LihatMenuBtnActionPerformed
 
     /**
      * @param args the command line arguments
