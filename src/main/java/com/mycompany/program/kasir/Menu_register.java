@@ -21,6 +21,7 @@ public class Menu_register extends javax.swing.JFrame {
     private PreparedStatement stat;
     private ResultSet rs;
     connect k = new connect();
+    session session = new session();
 
     /**
      * Creates new form Menu_masakan
@@ -71,7 +72,7 @@ public class Menu_register extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-
+        InputBtn.setEnabled(false);
         IdUserRegTF.setText("");
         NamaUserRegTF1.setText("");
         PasswordRegTF.setText("");
@@ -341,6 +342,9 @@ public class Menu_register extends javax.swing.JFrame {
 
     private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
         try {
+            if (!validateUser()) {
+                return;
+            }
             String sql = "UPDATE user SET username = ?, name_user = ?, password = ?, id_level = ? WHERE id_user = ?";
             this.stat = k.getCon().prepareStatement(sql);
 
@@ -361,8 +365,19 @@ public class Menu_register extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
+    public boolean validateUser() {
+        if (session.getIdLevel() != 1) {
+            JOptionPane.showMessageDialog(null, "tidak punya hak akses");
+            return false;
+        }
+        return true;
+    }
+
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
         try {
+            if (!validateUser()) {
+                return;
+            }
             user u = new user();
             if (u.username == null || u.username.isEmpty()
                     || u.password == null || u.password.isEmpty()
@@ -388,15 +403,14 @@ public class Menu_register extends javax.swing.JFrame {
         Menu_masakan m = new Menu_masakan();
         m.setVisible(true);
         this.setVisible(false);
-        m.InputBtn.setEnabled(true);
-        m.DeleteBtn.setEnabled(true);
-        m.MenuRegisterBtn.setEnabled(true);
-        m.MenuTransaksiBtn.setEnabled(true);
-        m.UpdateBtn.setEnabled(true);
     }//GEN-LAST:event_MenuRegisterBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         try {
+
+            if (!validateUser()) {
+                return;
+            }
             int id_user = Integer.parseInt(IdUserRegTF.getText());
             int confirm = JOptionPane.showConfirmDialog(
                     null,
@@ -433,6 +447,10 @@ public class Menu_register extends javax.swing.JFrame {
     }//GEN-LAST:event_LogoutBtnActionPerformed
 
     private void Table_RegistrasiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_RegistrasiMouseClicked
+        if (!validateUser()) {
+            return;
+        }
+        InputBtn.setEnabled(false);
         IdUserRegTF.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 0).toString());
         UsernameRegTF.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 1).toString());
         NamaUserRegTF1.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 2).toString());
