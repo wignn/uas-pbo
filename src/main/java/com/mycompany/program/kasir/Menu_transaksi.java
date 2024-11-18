@@ -8,6 +8,7 @@ package com.mycompany.program.kasir;
  *
  * @author tigfi
  */
+import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -97,11 +98,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
         model.addColumn("Id Transaksi");
         model.addColumn("Nama Pelanggan");
         model.addColumn("Id Masakan");
-        model.addColumn("Tanggal");
         model.addColumn("Nama Masakan");
         model.addColumn("Harga");
         model.addColumn("Jumlah Beli");
         model.addColumn("Total Beli");
+        model.addColumn("Tanggal");
         TableTransaksi.setModel(model);
         try {
             this.stat = k.getCon().prepareStatement("select * from transaksi");
@@ -127,7 +128,6 @@ public class Menu_transaksi extends javax.swing.JFrame {
         JumlahBeliTF.setText("");
         TotalBayarTF.setText("");
         DateTF.setDate(null);
-        InputBtn.setEnabled(true);
     }
 
     public void refreshCombo() {
@@ -182,6 +182,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
+        setLocation(new java.awt.Point(0, 0));
 
         jLabel2.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel2.setText("ID Transaksi");
@@ -432,6 +433,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "tidak punya hak akses");
                 return;
             }
+            InputBtn.setEnabled(true);
             transaksi t = new transaksi();
             t.id_transaksi = Integer.parseInt(IdTransaksiTF.getText());
             t.nama_pelanggan = NamaPelangganTF.getText();
@@ -439,15 +441,6 @@ public class Menu_transaksi extends javax.swing.JFrame {
             Date date = DateTF.getDate();
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             t.tanggal = df.format(date);
-
-            System.out.println("Debugging data transaksi sebelum query:");
-            System.out.println("ID Transaksi: " + t.id_transaksi);
-            System.out.println("Nama Pelanggan: " + t.nama_pelanggan);
-            System.out.println("Tanggal: " + t.tanggal);
-            System.out.println("Nama Masakan: " + t.nama_masakan);
-            System.out.println("Harga: " + t.harga);
-            System.out.println("Jumlah Beli: " + t.jumlah_beli);
-            System.out.println("Total Bayar: " + t.total_bayar);
 
             String sql = "UPDATE transaksi SET nama_pelanggan = ?,id_masakan=?, tanggal = ?, nama_masakan = ?, harga = ?, jumlah_beli = ?, total_bayar = ? WHERE id_transaksi = ?";
             this.stat = k.getCon().prepareStatement(sql);
@@ -523,6 +516,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "tidak punya hak akses");
                 return;
             }
+            InputBtn.setEnabled(true);
             transaksi t = new transaksi();
             int confirm = JOptionPane.showConfirmDialog(
                     null,
@@ -571,14 +565,14 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 return;
             }
             InputBtn.setEnabled(false);
-            String dateString = model.getValueAt(TableTransaksi.getSelectedRow(), 3).toString();
+            String dateString = model.getValueAt(TableTransaksi.getSelectedRow(), 7).toString();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = dateFormat.parse(dateString);
             DateTF.setDate(date);
             IdTransaksiTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 0).toString());
             NamaPelangganTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 1).toString());
-            JumlahBeliTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 6).toString());
-            TotalBayarTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 7).toString());
+            JumlahBeliTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 5).toString());
+            TotalBayarTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 6).toString());
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

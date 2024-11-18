@@ -4,6 +4,7 @@ package com.mycompany.program.kasir;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -150,7 +151,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_PasswordFieldActionPerformed
 
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
-        try {
+        try {           
             user u = new user();
             this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "';");
 

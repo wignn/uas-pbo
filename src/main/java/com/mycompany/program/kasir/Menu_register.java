@@ -1,5 +1,6 @@
 package com.mycompany.program.kasir;
 
+import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,13 +17,11 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author tigfi
  */
 public class Menu_register extends javax.swing.JFrame {
-
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
     connect k = new connect();
     session session = new session();
-
     /**
      * Creates new form Menu_masakan
      */
@@ -66,13 +65,14 @@ public class Menu_register extends javax.swing.JFrame {
                     rs.getString("id_user"),
                     rs.getString("username"),
                     rs.getString("name_user"),
-                    rs.getString("id_level"),};
+                    rs.getString("id_level"),
+                };
                 model.addRow(data);
             };
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        InputBtn.setEnabled(false);
         IdUserRegTF.setText("");
         NamaUserRegTF1.setText("");
         PasswordRegTF.setText("");
@@ -342,18 +342,23 @@ public class Menu_register extends javax.swing.JFrame {
 
     private void UpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBtnActionPerformed
         try {
+
             if (!validateUser()) {
                 return;
             }
+            user u = new user();
+            if(PasswordRegTF.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Password harus di isi");
+            }
+            InputBtn.setEnabled(true);
+ 
             String sql = "UPDATE user SET username = ?, name_user = ?, password = ?, id_level = ? WHERE id_user = ?";
             this.stat = k.getCon().prepareStatement(sql);
-
-            stat.setString(1, UsernameRegTF.getText());
-            stat.setString(2, NamaUserRegTF1.getText());
+            stat.setString(1, u.username);
+            stat.setString(2, u.nama_user);
             stat.setString(3, BCrypt.hashpw(PasswordRegTF.getText(), BCrypt.gensalt(10)));
-            stat.setInt(4, Integer.parseInt(IdLevelComboBox.getSelectedItem().toString()));
-            stat.setInt(5, Integer.parseInt(IdUserRegTF.getText()));
-
+            stat.setInt(4, u.id_level);
+            stat.setInt(5, u.id_user);
             int rowsUpdated = stat.executeUpdate();
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
@@ -375,9 +380,6 @@ public class Menu_register extends javax.swing.JFrame {
 
     private void InputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputBtnActionPerformed
         try {
-            if (!validateUser()) {
-                return;
-            }
             user u = new user();
             if (u.username == null || u.username.isEmpty()
                     || u.password == null || u.password.isEmpty()
@@ -407,10 +409,10 @@ public class Menu_register extends javax.swing.JFrame {
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         try {
-
             if (!validateUser()) {
                 return;
             }
+            InputBtn.setEnabled(true);
             int id_user = Integer.parseInt(IdUserRegTF.getText());
             int confirm = JOptionPane.showConfirmDialog(
                     null,
