@@ -351,14 +351,13 @@ public class Menu_register extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Password harus di isi");
             }
             InputBtn.setEnabled(true);
- 
             String sql = "UPDATE user SET username = ?, name_user = ?, password = ?, id_level = ? WHERE id_user = ?";
             this.stat = k.getCon().prepareStatement(sql);
             stat.setString(1, u.username);
             stat.setString(2, u.nama_user);
             stat.setString(3, BCrypt.hashpw(PasswordRegTF.getText(), BCrypt.gensalt(10)));
-            stat.setInt(4, u.id_level);
-            stat.setInt(5, u.id_user);
+               stat.setInt(4, Integer.parseInt(IdLevelComboBox.getSelectedItem().toString()));
+            stat.setInt(5,Integer.parseInt(IdUserRegTF.getText()));
             int rowsUpdated = stat.executeUpdate();
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");

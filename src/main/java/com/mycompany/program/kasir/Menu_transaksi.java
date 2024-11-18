@@ -8,8 +8,14 @@ package com.mycompany.program.kasir;
  *
  * @author tigfi
  */
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
+import java.io.File;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
@@ -18,8 +24,10 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class Menu_transaksi extends javax.swing.JFrame {
@@ -27,8 +35,8 @@ public class Menu_transaksi extends javax.swing.JFrame {
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
-    connect k = new connect();
     session session = new session();
+    connect k = new connect();
 
     /**
      * Creates new form Menu_masakan
@@ -38,11 +46,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
         initComponents();
         refreshCombo();
         refreshTable();
+        CetakLaporanBtn.setEnabled(true);
     }
 
     public boolean validateUser() {
         if (session.getIdLevel() < 4 && session.getIdLevel() > 0) {
-
             return true;
         }
         return false;
@@ -249,7 +257,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
         });
 
         CetakLaporanBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        CetakLaporanBtn.setText("Menu Registrasi");
+        CetakLaporanBtn.setText("Cetak Laporan");
         CetakLaporanBtn.setEnabled(false);
         CetakLaporanBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -507,7 +515,15 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
 
     private void CetakLaporanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CetakLaporanBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            File file = new File("src/main/java/com/mycompany/program/kasir/laporan/Laporan_Transaksi.jasper");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(file.getPath(), null, k.getCon());
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e.getMessage());
+
+        }
     }//GEN-LAST:event_CetakLaporanBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
