@@ -40,7 +40,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="signBtn" min="-2" pref="139" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="Guest" min="-2" pref="139" max="-2" attributes="0"/>
+                                  <Component id="GuestBtn" min="-2" pref="139" max="-2" attributes="0"/>
                               </Group>
                               <Component id="PasswordField" max="32767" attributes="0"/>
                           </Group>
@@ -72,7 +72,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="signBtn" min="-2" pref="38" max="-2" attributes="0"/>
-                  <Component id="Guest" alignment="0" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="GuestBtn" alignment="0" min="-2" pref="38" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="62" max="32767" attributes="0"/>
           </Group>
@@ -131,7 +131,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="signBtnActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="Guest">
+    <Component class="javax.swing.JButton" name="GuestBtn">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Consolas" size="18" style="0"/>
@@ -139,7 +139,7 @@
         <Property name="text" type="java.lang.String" value="Guest"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GuestActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GuestBtnActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -64,7 +64,7 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         PasswordField = new javax.swing.JPasswordField();
         signBtn = new javax.swing.JButton();
-        Guest = new javax.swing.JButton();
+        GuestBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,11 +99,11 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        Guest.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        Guest.setText("Guest");
-        Guest.addActionListener(new java.awt.event.ActionListener() {
+        GuestBtn.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        GuestBtn.setText("Guest");
+        GuestBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GuestActionPerformed(evt);
+                GuestBtnActionPerformed(evt);
             }
         });
 
@@ -127,7 +127,7 @@ public class Login extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(signBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(Guest, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(GuestBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(PasswordField)))))
                 .addGap(21, 21, Short.MAX_VALUE))
         );
@@ -149,7 +149,7 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(signBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Guest, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GuestBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(62, Short.MAX_VALUE))
         );
 
@@ -213,9 +213,11 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_signBtnActionPerformed
 
-    private void GuestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuestActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_GuestActionPerformed
+    private void GuestBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuestBtnActionPerformed
+        this.setVisible(false);
+        Menu_masakan m = new Menu_masakan();
+        m.setVisible(true);
+    }//GEN-LAST:event_GuestBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -253,7 +255,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Guest;
+    private javax.swing.JButton GuestBtn;
     private javax.swing.JPasswordField PasswordField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

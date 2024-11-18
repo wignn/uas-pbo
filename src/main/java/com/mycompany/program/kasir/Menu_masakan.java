@@ -64,6 +64,7 @@ public class Menu_masakan extends javax.swing.JFrame {
             MenuRegisterBtn.setEnabled(true);
             MenuTransaksiBtn.setEnabled(true);
             UpdateBtn.setEnabled(true);
+            LogoutBtn.setEnabled(true);
             return true;
         }
 
