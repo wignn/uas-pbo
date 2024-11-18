@@ -8,7 +8,9 @@ package com.mycompany.program.kasir;
  *
  * @author tigfi
  */
+import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
@@ -16,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
@@ -26,8 +27,8 @@ public class Menu_transaksi extends javax.swing.JFrame {
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
-    connect k = new connect();
     session session = new session();
+    connect k = new connect();
 
     /**
      * Creates new form Menu_masakan
@@ -37,11 +38,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
         initComponents();
         refreshCombo();
         refreshTable();
+        CetakLaporanBtn.setEnabled(true);
     }
 
     public boolean validateUser() {
         if (session.getIdLevel() < 4 && session.getIdLevel() > 0) {
-
             return true;
         }
         return false;
@@ -97,11 +98,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
         model.addColumn("Id Transaksi");
         model.addColumn("Nama Pelanggan");
         model.addColumn("Id Masakan");
-        model.addColumn("Tanggal");
         model.addColumn("Nama Masakan");
         model.addColumn("Harga");
         model.addColumn("Jumlah Beli");
         model.addColumn("Total Beli");
+        model.addColumn("Tanggal");
         TableTransaksi.setModel(model);
         try {
             this.stat = k.getCon().prepareStatement("select * from transaksi");
@@ -127,7 +128,6 @@ public class Menu_transaksi extends javax.swing.JFrame {
         JumlahBeliTF.setText("");
         TotalBayarTF.setText("");
         DateTF.setDate(null);
-        InputBtn.setEnabled(true);
     }
 
     public void refreshCombo() {
@@ -182,6 +182,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
+        setLocation(new java.awt.Point(0, 0));
 
         jLabel2.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel2.setText("ID Transaksi");
@@ -248,7 +249,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
         });
 
         CetakLaporanBtn.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        CetakLaporanBtn.setText("Menu Registrasi");
+        CetakLaporanBtn.setText("Cetak Laporan");
         CetakLaporanBtn.setEnabled(false);
         CetakLaporanBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -432,6 +433,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "tidak punya hak akses");
                 return;
             }
+            InputBtn.setEnabled(true);
             transaksi t = new transaksi();
             t.id_transaksi = Integer.parseInt(IdTransaksiTF.getText());
             t.nama_pelanggan = NamaPelangganTF.getText();
@@ -439,15 +441,6 @@ public class Menu_transaksi extends javax.swing.JFrame {
             Date date = DateTF.getDate();
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             t.tanggal = df.format(date);
-
-            System.out.println("Debugging data transaksi sebelum query:");
-            System.out.println("ID Transaksi: " + t.id_transaksi);
-            System.out.println("Nama Pelanggan: " + t.nama_pelanggan);
-            System.out.println("Tanggal: " + t.tanggal);
-            System.out.println("Nama Masakan: " + t.nama_masakan);
-            System.out.println("Harga: " + t.harga);
-            System.out.println("Jumlah Beli: " + t.jumlah_beli);
-            System.out.println("Total Bayar: " + t.total_bayar);
 
             String sql = "UPDATE transaksi SET nama_pelanggan = ?,id_masakan=?, tanggal = ?, nama_masakan = ?, harga = ?, jumlah_beli = ?, total_bayar = ? WHERE id_transaksi = ?";
             this.stat = k.getCon().prepareStatement(sql);
@@ -514,7 +507,15 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
 
     private void CetakLaporanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CetakLaporanBtnActionPerformed
-        // TODO add your handling code here:
+        try {
+            File file = new File("src/main/java/com/mycompany/program/kasir/laporan/Laporan_Transaksi.jasper");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(file.getPath(), null, k.getCon());
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e.getMessage());
+
+        }
     }//GEN-LAST:event_CetakLaporanBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
@@ -523,6 +524,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "tidak punya hak akses");
                 return;
             }
+            InputBtn.setEnabled(true);
             transaksi t = new transaksi();
             int confirm = JOptionPane.showConfirmDialog(
                     null,
@@ -571,14 +573,14 @@ public class Menu_transaksi extends javax.swing.JFrame {
                 return;
             }
             InputBtn.setEnabled(false);
-            String dateString = model.getValueAt(TableTransaksi.getSelectedRow(), 3).toString();
+            String dateString = model.getValueAt(TableTransaksi.getSelectedRow(), 7).toString();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = dateFormat.parse(dateString);
             DateTF.setDate(date);
             IdTransaksiTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 0).toString());
             NamaPelangganTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 1).toString());
-            JumlahBeliTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 6).toString());
-            TotalBayarTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 7).toString());
+            JumlahBeliTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 5).toString());
+            TotalBayarTF.setText(model.getValueAt(TableTransaksi.getSelectedRow(), 6).toString());
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

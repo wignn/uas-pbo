@@ -1,6 +1,10 @@
 package com.mycompany.program.kasir;
 
+import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -17,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 public class Menu_masakan extends javax.swing.JFrame {
 
     session session = new session();
-
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
@@ -27,10 +30,12 @@ public class Menu_masakan extends javax.swing.JFrame {
      * Creates new form Menu_masakan
      */
     public Menu_masakan() {
+
         k.db();
         initComponents();
         refreshTable();
         validateUser();
+
     }
 
     class masakan extends Menu_masakan {
@@ -59,6 +64,7 @@ public class Menu_masakan extends javax.swing.JFrame {
             MenuRegisterBtn.setEnabled(true);
             MenuTransaksiBtn.setEnabled(true);
             UpdateBtn.setEnabled(true);
+            LogoutBtn.setEnabled(true);
             return true;
         }
 
@@ -92,7 +98,7 @@ public class Menu_masakan extends javax.swing.JFrame {
             System.out.print(e);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-InputBtn.setEnabled(true);
+
         NamaMasakanTF.setText("");
         HargaMasakanTF.setText("");
         IdMasakanTF1.setText("");
@@ -367,6 +373,7 @@ InputBtn.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Tidak punya hak akses");
                 return;
             }
+            InputBtn.setEnabled(true);
             masakan m = new masakan();
             System.out.print(m.harga + m.id_masakan + m.nama_masakan + m.status);
             String sql = "UPDATE masakan SET nama_masakan = ?, harga = ?, status = ? WHERE id_masakan = ?";
@@ -423,6 +430,7 @@ InputBtn.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Tidak punya hak akses");
                 return;
             }
+            InputBtn.setEnabled(true);
             masakan m = new masakan();
             int confirm = JOptionPane.showConfirmDialog(
                     null,

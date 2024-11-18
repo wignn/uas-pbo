@@ -1,10 +1,10 @@
 com\mycompany\program\kasir\Menu_transaksi$8.class
 com\mycompany\program\kasir\Menu_masakan$2.class
-com\mycompany\program\kasir\session.class
 com\mycompany\program\kasir\Menu_masakan$10.class
 com\mycompany\program\kasir\Menu_register$2.class
 com\mycompany\program\kasir\Login$user.class
 com\mycompany\program\kasir\Login.class
+com\mycompany\program\kasir\Login$5.class
 com\mycompany\program\kasir\Menu_register$9.class
 com\mycompany\program\kasir\Menu_masakan$9.class
 com\mycompany\program\kasir\Login$2.class
@@ -32,6 +32,7 @@ com\mycompany\program\kasir\Menu_register$7.class
 com\mycompany\program\kasir\Menu_transaksi$11.class
 com\mycompany\program\kasir\Kasir.class
 com\mycompany\program\kasir\Menu_transaksi$3.class
+com\mycompany\program\kasir\storage\session.class
 com\mycompany\program\kasir\Menu_masakan$12.class
 com\mycompany\program\kasir\Menu_transaksi$6.class
 com\mycompany\program\kasir\Menu_masakan$4.class
@@ -48,7 +49,6 @@ com\mycompany\program\kasir\Menu_register$12.class
 com\mycompany\program\kasir\Menu_masakan$3.class
 com\mycompany\program\kasir\Menu_masakan.class
 com\mycompany\program\kasir\Menu_register$6.class
-com\mycompany\program\kasir\ProgramKasir.class
 com\mycompany\program\kasir\Menu_register$3.class
 com\mycompany\program\kasir\Menu_transaksi.class
 com\mycompany\program\kasir\Login$1.class

@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.program.kasir;
+package com.mycompany.program.kasir.storage;
 
 /**
  *
  * @author tigfi
  */
 public class session {
-
     public static String username;
     public static int id_user, id_level;
 
@@ -19,8 +18,6 @@ public class session {
         this.id_user = id_user;
         System.out.println(this.id_level);
         System.out.println(this.username);
-
-
     }
 
     public String getSession() {
