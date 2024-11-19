@@ -11,6 +11,8 @@ package com.mycompany.program.kasir;
 import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
@@ -18,9 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.view.JasperViewer;
 
 public class Menu_transaksi extends javax.swing.JFrame {
 
@@ -36,15 +35,18 @@ public class Menu_transaksi extends javax.swing.JFrame {
     public Menu_transaksi() {
         k.db();
         initComponents();
+
         refreshCombo();
         refreshTable();
-        CetakLaporanBtn.setEnabled(true);
+
     }
 
     public boolean validateUser() {
         if (session.getIdLevel() < 4 && session.getIdLevel() > 0) {
+            CetakLaporanBtn.setEnabled(true);
             return true;
         }
+        CetakLaporanBtn.setEnabled(false);
         return false;
     }
 
@@ -507,15 +509,43 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
 
     private void CetakLaporanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CetakLaporanBtnActionPerformed
-        try {
-            File file = new File("src/main/java/com/mycompany/program/kasir/laporan/Laporan_Transaksi.jasper");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(file.getPath(), null, k.getCon());
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        try (
+                FileWriter writer = new FileWriter("src/result.txt")) {
+            if (!validateUser()) {
+                JOptionPane.showMessageDialog(null, "tidak punya hak akses");
+                return;
+            }
+            this.stat = k.getCon().prepareStatement("select * from transaksi");
+            this.rs = this.stat.executeQuery();
+            String header = String.format(
+                    "%-15s %-20s %-15s %-20s %-15s %-15s %-15s%n",
+                    "ID_TRANSAKSI", "NAMA_PELANGGAN", "ID_MASAKAN", "NAMA_MASAKAN", "JUMLAH_BELI", "TOTAL_BAYAR", "TANGGAL"
+            );
+            writer.write(header);
+            writer.write("===========================================================================================================\n");
+            int totalUangMasuk = 0;
+            while (rs.next()) {
+                String row = String.format(
+                        "%-15s %-20s %-15s %-20s %-15s %-15s %-15s%n",
+                        rs.getString("id_transaksi"),
+                        rs.getString("nama_pelanggan"),
+                        rs.getString("id_masakan"),
+                        rs.getString("nama_masakan"),
+                        rs.getString("jumlah_beli"),
+                        rs.getString("total_bayar"),
+                        rs.getString("tanggal")
+                );
+                writer.write(row);
+                totalUangMasuk += rs.getInt("total_bayar");
+            }
+            writer.write("=============================================================================================================\n");
+            writer.write(String.format("%100s: %,d%n", "TOTAL UANG MASUK", totalUangMasuk));
 
+            JOptionPane.showMessageDialog(this, "Hasil telah disimpan di src/result.txt");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
+
     }//GEN-LAST:event_CetakLaporanBtnActionPerformed
 
     private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed

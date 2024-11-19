@@ -19,7 +19,6 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 
 public class Login extends javax.swing.JFrame {
-
     private PreparedStatement stat;
     private ResultSet rs;
     connect k = new connect();
