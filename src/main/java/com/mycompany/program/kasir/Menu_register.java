@@ -17,11 +17,13 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author tigfi
  */
 public class Menu_register extends javax.swing.JFrame {
+
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
     connect k = new connect();
     session session = new session();
+
     /**
      * Creates new form Menu_masakan
      */
@@ -65,8 +67,7 @@ public class Menu_register extends javax.swing.JFrame {
                     rs.getString("id_user"),
                     rs.getString("username"),
                     rs.getString("name_user"),
-                    rs.getString("id_level"),
-                };
+                    rs.getString("id_level"),};
                 model.addRow(data);
             };
 
@@ -347,7 +348,7 @@ public class Menu_register extends javax.swing.JFrame {
                 return;
             }
             user u = new user();
-            if(PasswordRegTF.getText().isEmpty()){
+            if (PasswordRegTF.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Password harus di isi");
             }
             InputBtn.setEnabled(true);
@@ -356,8 +357,8 @@ public class Menu_register extends javax.swing.JFrame {
             stat.setString(1, u.username);
             stat.setString(2, u.nama_user);
             stat.setString(3, BCrypt.hashpw(PasswordRegTF.getText(), BCrypt.gensalt(10)));
-               stat.setInt(4, Integer.parseInt(IdLevelComboBox.getSelectedItem().toString()));
-            stat.setInt(5,Integer.parseInt(IdUserRegTF.getText()));
+            stat.setInt(4, Integer.parseInt(IdLevelComboBox.getSelectedItem().toString()));
+            stat.setInt(5, Integer.parseInt(IdUserRegTF.getText()));
             int rowsUpdated = stat.executeUpdate();
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
@@ -403,6 +404,7 @@ public class Menu_register extends javax.swing.JFrame {
     private void MenuRegisterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRegisterBtnActionPerformed
         Menu_masakan m = new Menu_masakan();
         m.setVisible(true);
+        m.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_MenuRegisterBtnActionPerformed
 
@@ -443,6 +445,8 @@ public class Menu_register extends javax.swing.JFrame {
 
     private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
         Login l = new Login();
+        l.setLocationRelativeTo(null);
+        session.setSession(0, null, 0);
         l.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
@@ -455,7 +459,6 @@ public class Menu_register extends javax.swing.JFrame {
         IdUserRegTF.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 0).toString());
         UsernameRegTF.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 1).toString());
         NamaUserRegTF1.setText(model.getValueAt(Table_Registrasi.getSelectedRow(), 2).toString());
-
     }//GEN-LAST:event_Table_RegistrasiMouseClicked
 
     /**
@@ -489,7 +492,9 @@ public class Menu_register extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu_register().setVisible(true);
+                Menu_register m = new Menu_register();
+                m.setVisible(true);
+                m.setLocationRelativeTo(null);
             }
         });
     }

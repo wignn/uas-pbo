@@ -10,9 +10,7 @@ package com.mycompany.program.kasir;
  */
 import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
@@ -35,7 +33,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
     public Menu_transaksi() {
         k.db();
         initComponents();
-
+        validateUser();
         refreshCombo();
         refreshTable();
 
@@ -507,12 +505,11 @@ public class Menu_transaksi extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_InputBtnActionPerformed
 
-
     private void CetakLaporanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CetakLaporanBtnActionPerformed
         try (
-                FileWriter writer = new FileWriter("src/result.txt")) {
+                FileWriter writer = new FileWriter("Laporan_Transaksi.txt")) {
             if (!validateUser()) {
-                JOptionPane.showMessageDialog(null, "tidak punya hak akses");
+                JOptionPane.showMessageDialog(null, "Laporan_Transaksi.txt");
                 return;
             }
             this.stat = k.getCon().prepareStatement("select * from transaksi");
@@ -541,7 +538,7 @@ public class Menu_transaksi extends javax.swing.JFrame {
             writer.write("=============================================================================================================\n");
             writer.write(String.format("%100s: %,d%n", "TOTAL UANG MASUK", totalUangMasuk));
 
-            JOptionPane.showMessageDialog(this, "Hasil telah disimpan di src/result.txt");
+            JOptionPane.showMessageDialog(this, "Hasil telah disimpan result.txt");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -589,6 +586,9 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
     private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
         Login l = new Login();
+        l.setLocationRelativeTo(null);
+        l.setVisible(true);
+        session.setSession(0, null, 0);
         l.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
@@ -619,6 +619,8 @@ public class Menu_transaksi extends javax.swing.JFrame {
 
     private void LihatMenuBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LihatMenuBtnActionPerformed
         Menu_masakan m = new Menu_masakan();
+        m.setLocationRelativeTo(null);
+        m.setVisible(true);
         m.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_LihatMenuBtnActionPerformed
@@ -656,7 +658,9 @@ public class Menu_transaksi extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu_transaksi().setVisible(true);
+                Menu_transaksi m = new Menu_transaksi();
+                m.setVisible(true);
+                m.setLocationRelativeTo(null);
             }
         });
     }

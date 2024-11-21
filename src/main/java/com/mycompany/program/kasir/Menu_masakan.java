@@ -2,9 +2,6 @@ package com.mycompany.program.kasir;
 
 import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -30,7 +27,6 @@ public class Menu_masakan extends javax.swing.JFrame {
      * Creates new form Menu_masakan
      */
     public Menu_masakan() {
-
         k.db();
         initComponents();
         refreshTable();
@@ -67,7 +63,9 @@ public class Menu_masakan extends javax.swing.JFrame {
             LogoutBtn.setEnabled(true);
             return true;
         }
-
+        NamaMasakanTF.setEnabled(false);
+        HargaMasakanTF.setEnabled(false);
+        StatusComboBox.setEnabled(false);
         return false;
     }
 
@@ -310,8 +308,8 @@ public class Menu_masakan extends javax.swing.JFrame {
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(HargaMasakanTF)
-                                    .addComponent(StatusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(StatusComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(HargaMasakanTF)))
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -420,6 +418,7 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     private void MenuRegisterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRegisterBtnActionPerformed
         Menu_register r = new Menu_register();
+        r.setLocationRelativeTo(null);
         r.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_MenuRegisterBtnActionPerformed
@@ -457,6 +456,8 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
         Login l = new Login();
+        l.setLocationRelativeTo(null);
+        session.setSession(0, null, 0);
         l.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_LogoutBtnActionPerformed
@@ -475,6 +476,7 @@ public class Menu_masakan extends javax.swing.JFrame {
 
     private void MenuTransaksiBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuTransaksiBtnActionPerformed
         Menu_transaksi t = new Menu_transaksi();
+        t.setLocationRelativeTo(null);
         t.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_MenuTransaksiBtnActionPerformed
@@ -513,7 +515,9 @@ public class Menu_masakan extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu_masakan().setVisible(true);
+                Menu_masakan m = new Menu_masakan();
+                m.setVisible(true);
+                m.setLocationRelativeTo(null);
             }
         });
     }

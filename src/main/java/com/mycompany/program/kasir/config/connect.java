@@ -11,11 +11,15 @@ package com.mycompany.program.kasir.config;
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 import javax.swing.JOptionPane;
 
 public class connect {
+
     private static final Dotenv dotenv = Dotenv.load();
     private String Url = dotenv.get("DATABASE_URL");
     private Connection con;
@@ -28,8 +32,8 @@ public class connect {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
-    public Connection getCon(){
+
+    public Connection getCon() {
         return con;
     }
 }

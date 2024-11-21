@@ -8,17 +8,16 @@ import com.mycompany.program.kasir.storage.session;
 import com.mycompany.program.kasir.config.connect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import java.lang.Exception;
-import com.mycompany.program.kasir.Menu_register;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author tigfi
  */
-
 public class Login extends javax.swing.JFrame {
+
     private PreparedStatement stat;
     private ResultSet rs;
     connect k = new connect();
@@ -27,10 +26,8 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-
     public Login() {
         k.db();
-
         initComponents();
     }
 
@@ -164,7 +161,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_PasswordFieldActionPerformed
 
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
-        try {           
+        try {
             user u = new user();
             this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "';");
             this.rs = this.stat.executeQuery();
@@ -178,21 +175,25 @@ public class Login extends javax.swing.JFrame {
                         case 1:
                             Menu_register reg = new Menu_register();
                             reg.setVisible(true);
+                            reg.setLocationRelativeTo(null);
                             this.setVisible(false);
                             break;
                         case 2:
                             Menu_transaksi tran = new Menu_transaksi();
                             tran.setVisible(true);
+                            tran.setLocationRelativeTo(null);
                             this.setVisible(false);
                             break;
                         case 3:
                             Menu_transaksi tran2 = new Menu_transaksi();
+                            tran2.setLocationRelativeTo(null);
                             tran2.setVisible(true);
                             this.setVisible(false);
                             tran2.CetakLaporanBtn.setEnabled(true);
                             break;
                         case 4:
                             Menu_masakan mas = new Menu_masakan();
+                            mas.setLocationRelativeTo(null);
                             mas.setVisible(true);
                             this.setVisible(false);
                             mas.LogoutBtn.setEnabled(true);
@@ -207,15 +208,17 @@ public class Login extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "User tidak ditemukan");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_signBtnActionPerformed
 
     private void GuestBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuestBtnActionPerformed
-        this.setVisible(false);
+
         Menu_masakan m = new Menu_masakan();
+        m.setLocationRelativeTo(null);
         m.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_GuestBtnActionPerformed
 
     /**
@@ -248,7 +251,9 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                Login l = new Login();
+                l.setVisible(true);
+                l.setLocationRelativeTo(null);
             }
         });
     }
