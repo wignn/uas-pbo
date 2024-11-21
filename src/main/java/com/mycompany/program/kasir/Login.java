@@ -163,7 +163,8 @@ public class Login extends javax.swing.JFrame {
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
         try {
             user u = new user();
-            this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = '" + u.username + "';");
+            this.stat = k.getCon().prepareStatement("SELECT * FROM user WHERE username = ?");
+            this.stat.setString(1, u.username);
             this.rs = this.stat.executeQuery();
             if (rs.next()) {
                 String hashedPassword = rs.getString("password");
