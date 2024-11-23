@@ -9,12 +9,9 @@ package com.mycompany.program.kasir.config;
  *
  * @author tigfi
  */
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import javax.swing.JOptionPane;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 import javax.swing.JOptionPane;
 
@@ -26,7 +23,7 @@ public class connect {
 
     public void db() {
         try {
-            con = DriverManager.getConnection(Url);
+            con = DriverManager.getConnection(Url , "root", "");
             System.out.println("koneksi berhasil");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

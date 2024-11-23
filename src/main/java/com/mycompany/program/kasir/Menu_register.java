@@ -17,7 +17,6 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author tigfi
  */
 public class Menu_register extends javax.swing.JFrame {
-
     private DefaultTableModel model = null;
     private PreparedStatement stat;
     private ResultSet rs;
@@ -350,6 +349,7 @@ public class Menu_register extends javax.swing.JFrame {
             user u = new user();
             if (PasswordRegTF.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Password harus di isi");
+                return;
             }
             InputBtn.setEnabled(true);
             String sql = "UPDATE user SET username = ?, name_user = ?, password = ?, id_level = ? WHERE id_user = ?";
