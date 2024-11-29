@@ -17,13 +17,17 @@ import javax.swing.JOptionPane;
 
 public class connect {
 
-    private static final Dotenv dotenv = Dotenv.load();
-    private String Url = dotenv.get("DATABASE_URL");
+//    private static final Dotenv dotenv = Dotenv.load();
+//    private String Url = dotenv.get("DATABASE_URL");
+    
+    /*
+        You can use dotenv or a local database. The SQL file is added in the 'sql' folder, and you can import it into MySQL
+    */
     private Connection con;
 
     public void db() {
         try {
-            con = DriverManager.getConnection(Url , "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/restoran" , "root", "");
             System.out.println("koneksi berhasil");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
